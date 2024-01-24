@@ -15,7 +15,7 @@ function App() {
   useEffect(() => {
     const petPanda = async () => {
       try {
-        const getPandaResponse = await axios.post('https://demopanda.onrender.com/pet', {hasPetted: hasPetted}, {});
+        const getPandaResponse = await axios.post('hhttps://react-express-panda.onrender.com/pet', {hasPetted: hasPetted}, {});
         setBubble(getPandaResponse.data.message);
         setImageURL(getPandaResponse.data.image);
       } catch(e) {
