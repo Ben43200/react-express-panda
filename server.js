@@ -3,17 +3,10 @@ const path = require('path')
 const dotenv = require('dotenv')
 dotenv.config()
 
-
-// const express = require('express');
+const nodemailer = require('nodemailer')
 const app = express()
 
-// // const path = require('path');
-// const dotenv = require('dotenv');
 const cors = require('cors');
-// dotenv.config();
-// const express = require('express');
-// const morgan = require("morgan");
-// const { createProxyMiddleware } = require('http-proxy-middleware');
 
 
 
@@ -21,7 +14,7 @@ const cors = require('cors');
 
 
 // const app = express()
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 5000
 
 
 const buildPath = path.join(__dirname, 'build')
@@ -56,3 +49,70 @@ app.get('*', (req, res) => {
 app.listen(port, () => {
   console.log(`Server is online on port: ${port}`)
 })
+
+
+
+const transporter = nodemailer.createTransport("SMTP", {
+  host: "smtp-mail.outlook.com", // hostname
+  secureConnection: false, // TLS requires secureConnection to be false
+  port: 587, // port for secure SMTP
+  auth: {
+      user: process.env.EMAIL,
+      pass: process.env.PASSWORD
+  },
+  tls: {
+      ciphers:'SSLv3'
+  }
+});
+// *
+// const transporter = nodemailer.createTransport("SMTP",{
+//   host: "smtp-mail.outlook.com", //replace with your email provider
+//   port: 587,
+//   auth: {
+//     user: process.env.EMAIL,
+//     pass: process.env.PASSWORD
+//   }
+// });
+
+
+
+// verify connection configuration
+transporter.verify(function(error, success) {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log("Server is ready to take our messages");
+  }
+});
+
+
+
+
+app.post('/send', (req, res, next) => {
+  var name = req.body.name
+  var email = req.body.email
+  var subject = req.body.subject
+  var message = req.body.message
+
+  var mail = {
+    from: name,
+    to: email,
+    subject: subject,
+    text: message
+  }
+
+  transporter.sendMail(mail, (err, data) => {
+    if (err) {
+      res.json({
+        status: 'fail'
+      })
+    } else {
+      res.json({
+       status: 'success'
+      })
+    }
+  })
+})
+
+
+
