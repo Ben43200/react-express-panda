@@ -191,7 +191,7 @@ const transporter = nodemailer.createTransport( {
 	var content = `name: ${name} \n email: ${email} \n subject: ${subject} \n  message: ${message} `
 	var mail = {
 	  from: name,
-	  to: 'meteoben43200@outlook.fr',
+	  to: 'meteoben131543200@outlook.fr',
 	
 	  text: content
 	}
