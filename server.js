@@ -127,12 +127,14 @@ app.listen(port, () => {
 // app.use(cors())
 const transporter = nodemailer.createTransport( {
 	// service: "hotmail",
+	service: "Gmail",
 		host: process.env.MAIL_HOST,
 		port: process.env.MAIL_PORT,
-		// secure: false,
+		
+		
 		auth: {
 			user: process.env.MAIL_USER,
-			pass: process.env.MAIL_PASS
+			pass: process.env.API_KEY,
 		}
 		//   tls: {
 		// 	// do not fail on invalid certs
@@ -189,12 +191,18 @@ const transporter = nodemailer.createTransport( {
 	var subject = req.body.subject
 	var message = req.body.message
 	var content = `name: ${name} \n email: ${email} \n subject: ${subject} \n  message: ${message} `
-	var mail = {
-	  from: name,
-	  to: 'meteoben131543200@outlook.fr',
+	// var mail = {
+	//   from: name,
+	//   to: process.env.MAIL_TO,
 	
-	  text: content
-	}
+	//   text: content
+	// }
+	let mail = {
+		from: name,
+		to: process.env.MAIL_TO,
+		subject: 'Nodemailer Project',
+		text: content
+	  };
   
 	transporter.sendMail(mail, (err, data) => {
 	  if (err) {
